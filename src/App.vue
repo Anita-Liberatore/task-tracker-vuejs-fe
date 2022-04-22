@@ -1,36 +1,74 @@
 <template>
- <div class="container">
-    <Header
-      title="Task Tracker"
+  <div class="container">
+    <Header title="Task Tracker" />
+    <Tasks
+      @toggle-reminder="toggleReminder"
+      @delete-task="deleteTask"
+      :tasks="tasks"
     />
   </div>
 </template>
 
 <script>
-import Header from './components/Header.vue'
+import Header from "./components/Header.vue";
+import Tasks from "./components/Tasks.vue";
 
 export default {
   components: {
-    Header
+    Header,
+    Tasks,
   },
   data() {
-    
+    return {
+      tasks: [],
+    };
+  },
+  created() {
+    this.tasks = [
+      {
+        id: 1,
+        text: "Doctor Appointment",
+        day: "March 1st at 2:30pm",
+        reminder: true,
+      },
+      {
+        id: 2,
+        text: "Dentist",
+        day: "March 1st at 2:30pm",
+        reminder: true,
+      },
+
+      {
+        id: 3,
+        text: "Studyng exams",
+        day: "March 1st at 2:30pm",
+        reminder: false,
+      },
+    ];
   },
   methods: {
-   
+    deleteTask(id) {
+      this.tasks = this.tasks.filter((task) => task.id !== id);
+    },
+
+    toggleReminder(id) {
+      this.tasks = this.tasks.map((task) => 
+        task.id === id ? { ...task, reminder: !task.reminder } : task )
+    },
   },
-}
+};
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap");
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 .container {
   max-width: 500px;
