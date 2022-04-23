@@ -41,6 +41,7 @@ export default {
 
       return data;
     },
+
     async fetchTask(id) {
       const res = await fetch(`http://localhost:5000/tasks/${id}`);
 
@@ -52,13 +53,34 @@ export default {
     showAddTaskToogle() {
       this.showAddTask = !this.showAddTask;
     },
-    deleteTask(id) {
-      this.tasks = this.tasks.filter((task) => task.id !== id);
+
+    async deleteTask(id) {
+
+      const res = await fetch(`http://localhost:5000/tasks/${id}`, {
+        method: 'DELETE'
+      })
+      
+      res.status === 200 ? (this.tasks = this.tasks.filter((task) => task.id !== id)) : alert('Error deleting task')
     },
 
-    toggleReminder(id) {
+    async toggleReminder(id) {
+
+      const taskToToggle = await this.fetchTasks(id)
+
+      const updTask = {...taskToToggle, reminder: !taskToToggle.reminder}
+
+      const res = await fetch(`http://localhost:5000/tasks/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify(updTask)
+      })
+
+      const data = await res.json();
+
       this.tasks = this.tasks.map((task) =>
-        task.id === id ? { ...task, reminder: !task.reminder } : task
+        task.id === id ? { ...task, reminder: data.reminder} : task
       );
     },
 
