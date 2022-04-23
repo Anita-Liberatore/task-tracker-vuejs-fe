@@ -65,7 +65,7 @@ export default {
 
     async toggleReminder(id) {
 
-      const taskToToggle = await this.fetchTasks(id)
+      const taskToToggle = await this.fetchTask(id)
 
       const updTask = {...taskToToggle, reminder: !taskToToggle.reminder}
 
