@@ -12,7 +12,7 @@ export default {
   },
   methods: {
       onClick() {
-          console.log("ciao")
+          this.$emit('show-add-task')
       }
   }
 }

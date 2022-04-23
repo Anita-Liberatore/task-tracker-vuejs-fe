@@ -1,7 +1,10 @@
 <template>
   <div class="container">
-    <Header title="Task Tracker" />
-    <Add-task />
+    <Header @show-add-task="showAddTaskToogle" title="Task Tracker" />
+    <div v-show="showAddTask">
+      <Add-task @add-task="addTask" />
+    </div>
+
     <Tasks
       @toggle-reminder="toggleReminder"
       @delete-task="deleteTask"
@@ -19,11 +22,12 @@ export default {
   components: {
     Header,
     Tasks,
-    AddTask
+    AddTask,
   },
   data() {
     return {
       tasks: [],
+      showAddTask: false,
     };
   },
   created() {
@@ -50,13 +54,21 @@ export default {
     ];
   },
   methods: {
+    showAddTaskToogle() {
+      this.showAddTask = !this.showAddTask;
+    },
     deleteTask(id) {
       this.tasks = this.tasks.filter((task) => task.id !== id);
     },
 
     toggleReminder(id) {
-      this.tasks = this.tasks.map((task) => 
-        task.id === id ? { ...task, reminder: !task.reminder } : task )
+      this.tasks = this.tasks.map((task) =>
+        task.id === id ? { ...task, reminder: !task.reminder } : task
+      );
+    },
+
+    addTask(task) {
+      this.tasks = [...this.tasks, task];
     },
   },
 };
